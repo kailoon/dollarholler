@@ -2,6 +2,7 @@
 	import Button from '$lib/components/Button.svelte';
 	import CircledAmount from '$lib/components/CircledAmount.svelte';
 	import Search from '$lib/components/Search.svelte';
+	import SlidePanel from '$lib/components/SlidePanel.svelte';
 	import { loadInvoices, invoices } from '$lib/stores/InvoiceStore';
 	import { centsToDollars, sumInvoices } from '$lib/utils/moneyHelpers';
 	import supabase from '$lib/utils/supabase';
@@ -9,6 +10,8 @@
 	import BlankState from './BlankState.svelte';
 	import InvoiceRow from './InvoiceRow.svelte';
 	import InvoiceRowHeader from './InvoiceRowHeader.svelte';
+
+	let isInvoiceFormShowing = false;
 
 	onMount(async () => {
 		loadInvoices();
@@ -31,7 +34,12 @@
 		<div />
 	{/if}
 	<div>
-		<Button label="+ Invoice" onClick={() => {}} />
+		<Button
+			label="+ Invoice"
+			onClick={() => {
+				isInvoiceFormShowing = true;
+			}}
+		/>
 	</div>
 </div>
 
@@ -54,3 +62,13 @@
 		</footer>
 	{/if}
 </div>
+
+<!-- slidepanel -->
+{#if isInvoiceFormShowing}
+	<!-- content here -->
+	<SlidePanel
+		on:closePanel={() => {
+			isInvoiceFormShowing = false;
+		}}>Yolo</SlidePanel
+	>
+{/if}

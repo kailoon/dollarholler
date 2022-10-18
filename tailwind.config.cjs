@@ -28,14 +28,16 @@ module.exports = {
 			},
 			zIndex: {
 				modal: 999,
-				overlay: 998,
+				slidePanel: 998,
+				overlay: 997,
 				navBar: 90,
 				navBarToggle: 91
 			},
 			boxShadow: {
 				colored: '0px 7px 16px rgba(127, 91, 220, 0.002)',
 				coloredHover: '0px 16px 25px rgba(127, 91, 220, 0.3)',
-				tableRow: '0px 0px 6px rgba(0,0,0,0.16)'
+				tableRow: '0px 0px 6px rgba(0,0,0,0.16)',
+				slidePanel: '-4px 0px 44px rgba(0,0,0,0.25)'
 			},
 			gridTemplateColumns: {
 				invoiceTable: '100px 100px 60px 1fr 116px 32px 32px',
