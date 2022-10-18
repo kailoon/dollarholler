@@ -1,5 +1,6 @@
 <script lang="ts">
 	import CircledAmount from '$lib/components/CircledAmount.svelte';
+	import Portal from '$lib/components/Portal.svelte';
 	import Search from '$lib/components/Search.svelte';
 	import { loadInvoices, invoices } from '$lib/stores/InvoiceStore';
 	import { centsToDollars, sumInvoices } from '$lib/utils/moneyHelpers';
@@ -40,7 +41,8 @@
 
 <!-- Invoice list -->
 <section>
-	<!-- header -->
+	<Portal>Invoice Form</Portal>
+
 	<!-- Invoices -->
 	{#if $invoices === null}
 		Loading...
