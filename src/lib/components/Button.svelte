@@ -1,19 +1,31 @@
 <script lang="ts">
-	import { setContext } from 'svelte';
+	import type { SvelteComponent } from 'svelte';
 	export let label: string;
 	export let onClick: () => void;
 	export let isAnimated = true;
-	export let style: 'primary' | 'secondary' | 'destructive' = 'primary';
+	export let style: 'primary' | 'secondary' | 'destructive' | 'outline' | 'textonly' = 'primary';
+	export let iconLeft: (new (...args: any[]) => SvelteComponent) | null = null;
+	export let iconRight: (new (...args: any[]) => SvelteComponent) | null = null;
 </script>
 
 <button
-	class="relative whitespace-nowrap rounded-lg px-5 py-2 font-sansSerif text-base font-black lg:px-10 lg:py-3 lg:text-xl"
+	class="relative flex items-center whitespace-nowrap rounded-lg px-5 py-2 font-sansSerif text-base font-black lg:px-10 lg:py-3 lg:text-xl"
 	class:isAnimated
 	class:primary={style === 'primary'}
 	class:secondary={style === 'secondary'}
 	class:destructive={style === 'destructive'}
-	on:click|preventDefault={() => onClick()}>{label}</button
+	class:outline={style === 'outline'}
+	class:textonly={style === 'textonly'}
+	on:click|preventDefault={() => onClick()}
 >
+	{#if iconLeft}
+		<svelte:component this={iconLeft} class="mr-2" />
+	{/if}
+	{label}
+	{#if iconRight}
+		<svelte:component this={iconRight} class="ml-2" />
+	{/if}
+</button>
 
 <style lang="postcss">
 	.isAnimated {
@@ -27,5 +39,11 @@
 	}
 	.destructive {
 		@apply bg-scarlet text-goldenFizz;
+	}
+	.textonly {
+		@apply bg-transparent px-0 text-scarlet underline hover:no-underline;
+	}
+	.outline {
+		@apply border-daisyBush text-daisyBush hover:bg-daisyBush hover:text-white;
 	}
 </style>

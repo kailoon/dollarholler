@@ -8,6 +8,7 @@
 	import supabase from '$lib/utils/supabase';
 	import { onMount } from 'svelte';
 	import BlankState from './BlankState.svelte';
+	import InvoiceForm from './InvoiceForm.svelte';
 	import InvoiceRow from './InvoiceRow.svelte';
 	import InvoiceRowHeader from './InvoiceRowHeader.svelte';
 
@@ -69,6 +70,6 @@
 	<SlidePanel
 		on:closePanel={() => {
 			isInvoiceFormShowing = false;
-		}}>Yolo</SlidePanel
+		}}><InvoiceForm /></SlidePanel
 	>
 {/if}
