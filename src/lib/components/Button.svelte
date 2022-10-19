@@ -3,7 +3,13 @@
 	export let label: string;
 	export let onClick: () => void;
 	export let isAnimated = true;
-	export let style: 'primary' | 'secondary' | 'destructive' | 'outline' | 'textonly' = 'primary';
+	export let style:
+		| 'primary'
+		| 'secondary'
+		| 'destructive'
+		| 'outline'
+		| 'textonly'
+		| 'textonlydescructive' = 'primary';
 	export let iconLeft: (new (...args: any[]) => SvelteComponent) | null = null;
 	export let iconRight: (new (...args: any[]) => SvelteComponent) | null = null;
 </script>
@@ -16,6 +22,7 @@
 	class:destructive={style === 'destructive'}
 	class:outline={style === 'outline'}
 	class:textonly={style === 'textonly'}
+	class:textonlydescructive={style === 'textonlydescructive'}
 	on:click|preventDefault={() => onClick()}
 >
 	{#if iconLeft}
@@ -41,9 +48,12 @@
 		@apply bg-scarlet text-goldenFizz;
 	}
 	.textonly {
-		@apply bg-transparent px-0 text-scarlet underline hover:no-underline;
+		@apply bg-transparent px-0 text-lavenderIndigo underline hover:no-underline;
 	}
 	.outline {
 		@apply border-daisyBush text-daisyBush hover:bg-daisyBush hover:text-white;
+	}
+	.textonlydescructive {
+		@apply bg-transparent px-0 text-scarlet no-underline hover:underline;
 	}
 </style>
