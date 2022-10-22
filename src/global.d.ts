@@ -2,7 +2,6 @@ import type { InvoiceStatus, ClientStatus } from './enums';
 
 interface Invoice {
 	client: Client;
-	clientId: string;
 	createdAt: string;
 	dueDate: string;
 	id: string;
@@ -20,7 +19,6 @@ interface LineItem {
 	description: string;
 	id: string;
 	quantity: number;
-	invoiceId: string;
 }
 
 interface Client {

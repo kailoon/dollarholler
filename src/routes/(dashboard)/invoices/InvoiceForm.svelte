@@ -1,16 +1,28 @@
-<script>
+<script lang="ts">
 	import Button from '$lib/components/Button.svelte';
 	import Trash from '$lib/components/icon/Trash.svelte';
+	import type { LineItem } from 'src/global';
 	import LineItemRows from './LineItemRows.svelte';
+	import { v4 as uuidv4 } from 'uuid';
 
-	const blankLineItem = [
-		{
-			id: '1',
-			description: '',
-			quantity: 0,
-			amount: 0
-		}
-	];
+	const blankLineItem = {
+		id: uuidv4(),
+		description: '',
+		quantity: 0,
+		amount: 0
+	};
+
+	let lineItems: LineItem[] = [{ ...blankLineItem }];
+
+	const AddLineItem = () => {
+		lineItems = [...lineItems, { ...blankLineItem, id: uuidv4() }];
+	};
+	const RemoveLineItem = (event: { detail: string }) => {
+		lineItems = lineItems.filter((item) => item.id !== event.detail);
+	};
+	const UpdateLineItem = () => {
+		lineItems = lineItems;
+	};
 </script>
 
 <h2 class="mb-7 font-sansSerif text-3xl font-bold tracking-tight">Add an Invoice</h2>
@@ -48,7 +60,14 @@
 		<input type="text" name="subject" />
 	</div>
 	<!-- line items -->
-	<div class="field md:col-span-6"><LineItemRows lineItems={blankLineItem} /></div>
+	<div class="field md:col-span-6">
+		<LineItemRows
+			{lineItems}
+			on:addLineItem={AddLineItem}
+			on:removeLineItem={RemoveLineItem}
+			on:updateLineItem={UpdateLineItem}
+		/>
+	</div>
 	<!-- notes -->
 	<div class="field md:col-span-6">
 		<label for="notes"
