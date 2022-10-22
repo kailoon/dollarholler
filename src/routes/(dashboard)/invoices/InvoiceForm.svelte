@@ -8,6 +8,7 @@
 	import { v4 as uuidv4 } from 'uuid';
 	import { states } from '$lib/utils/states';
 	import { onMount } from 'svelte';
+	import { today } from '$lib/utils/dateHelpers';
 
 	const blankLineItem = {
 		id: uuidv4(),
@@ -75,8 +76,8 @@
 	</div>
 	<!-- invoice id -->
 	<div class="field md:col-span-2">
-		<label for="id">Invoice Id</label>
-		<input type="number" name="id" />
+		<label for="invoiceNumber">Invoice Id</label>
+		<input type="number" name="invoiceNumber" required />
 	</div>
 
 	<!-- new client -->
@@ -112,12 +113,12 @@
 	<!-- due date -->
 	<div class="field md:col-span-2">
 		<label for="dueDate">Due Date</label>
-		<input type="date" name="dueDate" />
+		<input type="date" name="dueDate" min={today} required />
 	</div>
 	<!-- issue date -->
 	<div class="field md:col-span-2 md:col-start-5">
 		<label for="issueDate">Issue Date</label>
-		<input type="date" name="issueDate" />
+		<input type="date" name="issueDate" min={today} required />
 	</div>
 	<!-- subject -->
 	<div class="field md:col-span-6">
@@ -161,6 +162,10 @@
 	</div>
 	<div class="field flex justify-end gap-x-4 md:col-span-4">
 		<Button label="Cancel" style="secondary" isAnimated={false} onClick={() => {}} />
-		<Button label="Save" style="primary" isAnimated={false} onClick={() => {}} />
+		<button
+			type="submit"
+			class="button translate-y-0 bg-lavenderIndigo text-white shadow-colored transition-all hover:-translate-y-2 hover:shadow-coloredHover"
+			>Save</button
+		>
 	</div>
 </form>
