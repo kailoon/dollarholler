@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Trash from '$lib/components/icon/Trash.svelte';
-	import { dollarsToCents, twoDecimals } from '$lib/utils/moneyHelpers';
+	import { dollarsToCents, twoDecimals, centsToDollars } from '$lib/utils/moneyHelpers';
 	import type { LineItem } from 'src/global';
 	import { createEventDispatcher } from 'svelte';
 
@@ -8,8 +8,8 @@
 	export let canDelete = false;
 	export let isRequired = false;
 
-	let unitPrice: string = twoDecimals(lineItem.amount / lineItem.quantity);
-	let amount: string = twoDecimals(lineItem.amount);
+	let unitPrice: string = centsToDollars(lineItem.amount / lineItem.quantity);
+	let amount: string = centsToDollars(lineItem.amount);
 
 	$: {
 		amount = twoDecimals(lineItem.quantity * Number(unitPrice));
@@ -19,8 +19,9 @@
 	let dispatch = createEventDispatcher();
 </script>
 
-<div class="invoice-line-item border-b-2 border-fog py-2">
-	<div>
+<div class="invoice-line-item border-b-2 border-fog py-4 sm:py-2">
+	<div class="description">
+		<label for="description" class="line-item-label">description</label>
 		<input
 			class="line-item"
 			type="text"
@@ -29,7 +30,9 @@
 			required={isRequired}
 		/>
 	</div>
-	<div>
+	<div class="unitPrice">
+		<label for="unitPrice" class="line-item-label text-right">Unit Price</label>
+
 		<input
 			class="line-item text-right"
 			type="number"
@@ -44,7 +47,9 @@
 			}}
 		/>
 	</div>
-	<div>
+	<div class="qty">
+		<label for="quantity" class="line-item-label text-center">QTY</label>
+
 		<input
 			class="line-item text-center"
 			type="number"
@@ -57,7 +62,8 @@
 			}}
 		/>
 	</div>
-	<div>
+	<div class="amount">
+		<label for="amount" class="line-item-label">Amount</label>
 		<input
 			class="line-item text-right"
 			type="number"
@@ -68,7 +74,7 @@
 			disabled
 		/>
 	</div>
-	<div>
+	<div class="trash">
 		{#if canDelete}
 			<button
 				class="center h-10 w-10 text-pastelPurple hover:text-lavenderIndigo"
@@ -97,5 +103,8 @@
 	input[type='number']:disabled,
 	input[type='text']:disabled {
 		@apply border-b-0 bg-transparent px-0;
+	}
+	.line-item-label {
+		@apply block sm:hidden;
 	}
 </style>

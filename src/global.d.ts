@@ -3,6 +3,7 @@ import type { InvoiceStatus, ClientStatus } from './enums';
 interface Invoice {
 	client: Client;
 	createdAt: string;
+	discount?: number;
 	dueDate: string;
 	id: string;
 	invoiceNumber: string;
@@ -22,14 +23,14 @@ interface LineItem {
 }
 
 interface Client {
-	clientStatus: ClientStatus;
+	clientStatus?: ClientStatus;
 	city: string;
 	email: string;
 	id: string;
 	name: string;
-	state: string;
-	street: string;
-	zip: string;
+	state?: string;
+	street?: string;
+	zip?: string;
 }
 
 interface Settings {
@@ -39,4 +40,12 @@ interface Settings {
 	state: string;
 	street: string;
 	zip: string;
+}
+
+type NotificationType = 'success' | 'info' | 'error' | 'warning';
+
+interface Snackbar {
+	id: string;
+	message: string;
+	type: NotificationType;
 }

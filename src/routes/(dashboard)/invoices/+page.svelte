@@ -70,6 +70,6 @@
 	<SlidePanel
 		on:closePanel={() => {
 			isInvoiceFormShowing = false;
-		}}><InvoiceForm /></SlidePanel
+		}}><InvoiceForm closePanel={() => (isInvoiceFormShowing = false)} /></SlidePanel
 	>
 {/if}

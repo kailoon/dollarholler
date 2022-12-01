@@ -27,11 +27,13 @@ module.exports = {
 				whisper: '#f9f4f9'
 			},
 			zIndex: {
+				toaster: 1000,
 				modal: 999,
-				slidePanel: 998,
-				overlay: 997,
-				navBar: 90,
-				navBarToggle: 91
+				modalOverlay: 998,
+				slidePanel: 997,
+				overlay: 996,
+				navBarToggle: 91,
+				navBar: 90
 			},
 			boxShadow: {
 				colored: '0px 7px 16px rgba(127, 91, 220, 0.002)',

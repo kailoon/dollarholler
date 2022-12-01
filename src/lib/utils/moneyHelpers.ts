@@ -63,3 +63,19 @@ export const sumInvoices = (invoices: Invoice[] | undefined): number => {
 		return preValue + invoiceSum;
 	}, 0);
 };
+
+/*
+ * Takes the lineItems and the discount and determines the invoice total
+ * @param {Array|undefined} lineItems
+ * @param {number|undefined} discount
+ * @returns {number}
+ */
+export const invoiceTotal = (lineItem: lineItem[] | undefined, discount: number | undefined): number => {
+	const lineItemsSum = sumLineItems(lineItem)
+	if(discount) {
+		const invoiceDiscount = lineItemsSum * (discount/100)
+		return lineItemsSum - invoiceDiscount
+	}
+
+	return lineItemsSum
+}

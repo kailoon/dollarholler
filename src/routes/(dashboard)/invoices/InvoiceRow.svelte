@@ -7,23 +7,26 @@
 	import Trash from '$lib/components/icon/Trash.svelte';
 	import Tag from '$lib/components/Tag.svelte';
 	import { convertDate, isLate } from '$lib/utils/dateHelpers';
-	import { centsToDollars, sumLineItems } from '$lib/utils/moneyHelpers';
+	import { centsToDollars, sumLineItems,invoiceTotal } from '$lib/utils/moneyHelpers';
 	import type { Invoice } from 'src/global';
-	import Modal from '$lib/components/Modal.svelte';
-	import Button from '$lib/components/Button.svelte';
-	import { deleteInvoice } from '$lib/stores/InvoiceStore';
+
+	import SlidePanel from '$lib/components/SlidePanel.svelte';
+	import InvoiceForm from './InvoiceForm.svelte';
+	import ConfirmDelete from './ConfirmDelete.svelte';
 
 	export let invoice: Invoice;
 	let isAdditionalMenuShowing = false;
 	let isOptionsDisabled = false;
 	let isModalShowing = false;
+	let isInvoiceFormShowing = false;
 
 	const handleDelete = () => {
 		isModalShowing = true;
 		isAdditionalMenuShowing = false;
 	};
 	const handleEdit = () => {
-		console.log('editing');
+		isInvoiceFormShowing = true;
+		isAdditionalMenuShowing = false;
 	};
 	const handleSendInvoice = () => {
 		console.log('sending invoice');
@@ -55,7 +58,7 @@
 		{invoice.client.name}
 	</div>
 	<div class="amount text-right font-mono text-sm font-bold lg:text-lg">
-		${centsToDollars(sumLineItems(invoice.lineItems))}
+		${centsToDollars(invoiceTotal(invoice.lineItems, invoice.discount))}
 	</div>
 	<div class="lg:center viewButton hidden text-sm lg:text-lg">
 		<a href="/" class="text-pastelPurple hover:text-daisyBush"><View /></a>
@@ -79,37 +82,22 @@
 	</div>
 </article>
 
-<!-- Modal -->
-<Modal isVisible={isModalShowing} on:close={() => (isModalShowing = false)}>
-	<div class="flex h-full min-h-[175px] flex-col items-center justify-between gap-6">
-		<div class="text-center text-xl font-bold text-daisyBush">
-			Are you sure you want to delete this invoice to <span class="text-scarlet"
-				>{invoice.client.name}</span
-			>
-			for
-			<span class="text-scarlet">{`${centsToDollars(sumLineItems(invoice.lineItems))}`}</span> ?
-		</div>
-		<div class="flex gap-4">
-			<Button
-				label="Cancel"
-				onClick={() => {
-					isModalShowing = false;
-				}}
-				isAnimated={false}
-				style="secondary"
-			/>
-			<Button
-				label="Yes, Delete It"
-				onClick={() => {
-					deleteInvoice(invoice);
-					isModalShowing = false;
-				}}
-				isAnimated={false}
-				style="destructive"
-			/>
-		</div>
-	</div>
-</Modal>
+<ConfirmDelete {invoice} {isModalShowing} on:close={() => (isModalShowing = false)} />
+
+<!-- slidepanel -->
+{#if isInvoiceFormShowing}
+	<!-- content here -->
+	<SlidePanel
+		on:closePanel={() => {
+			isInvoiceFormShowing = false;
+		}}
+		><InvoiceForm
+			{invoice}
+			formState="edit"
+			closePanel={() => (isInvoiceFormShowing = false)}
+		/></SlidePanel
+	>
+{/if}
 
 <style lang="postcss">
 	.invoice-row {
