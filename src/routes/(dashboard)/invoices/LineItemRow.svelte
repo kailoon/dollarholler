@@ -1,15 +1,16 @@
 <script lang="ts">
 	import Trash from '$lib/components/icon/Trash.svelte';
-	import { dollarsToCents, twoDecimals, centsToDollars } from '$lib/utils/moneyHelpers';
+	import { dollarsToCents, twoDecimals, centsToDollarWithoutCommas } from '$lib/utils/moneyHelpers';
 	import type { LineItem } from 'src/global';
 	import { createEventDispatcher } from 'svelte';
 
 	export let lineItem: LineItem;
 	export let canDelete = false;
 	export let isRequired = false;
+	export let isEditable = true;
 
-	let unitPrice: string = centsToDollars(lineItem.amount / lineItem.quantity);
-	let amount: string = centsToDollars(lineItem.amount);
+	let unitPrice: string = centsToDollarWithoutCommas(lineItem.amount / lineItem.quantity);
+	let amount: string = centsToDollarWithoutCommas(lineItem.amount);
 
 	$: {
 		amount = twoDecimals(lineItem.quantity * Number(unitPrice));
@@ -28,6 +29,7 @@
 			name="description"
 			bind:value={lineItem.description}
 			required={isRequired}
+			disabled={!isEditable}
 		/>
 	</div>
 	<div class="unitPrice">
@@ -40,6 +42,7 @@
 			required={isRequired}
 			step="0.01"
 			min="0"
+			disabled={!isEditable}
 			bind:value={unitPrice}
 			on:blur={() => {
 				unitPrice = twoDecimals(Number(unitPrice));
@@ -56,6 +59,7 @@
 			name="quantity"
 			required={isRequired}
 			min="0"
+			disabled={!isEditable}
 			bind:value={lineItem.quantity}
 			on:blur={() => {
 				dispatch('updateLineItem');
@@ -75,7 +79,7 @@
 		/>
 	</div>
 	<div class="trash">
-		{#if canDelete}
+		{#if canDelete && isEditable}
 			<button
 				class="center h-10 w-10 text-pastelPurple hover:text-lavenderIndigo"
 				on:click|preventDefault={() => {

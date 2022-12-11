@@ -7,7 +7,7 @@
 	import Trash from '$lib/components/icon/Trash.svelte';
 	import Tag from '$lib/components/Tag.svelte';
 	import { convertDate, isLate } from '$lib/utils/dateHelpers';
-	import { centsToDollars, sumLineItems,invoiceTotal } from '$lib/utils/moneyHelpers';
+	import { centsToDollars, sumLineItems, invoiceTotal } from '$lib/utils/moneyHelpers';
 	import type { Invoice } from 'src/global';
 
 	import SlidePanel from '$lib/components/SlidePanel.svelte';
@@ -61,7 +61,7 @@
 		${centsToDollars(invoiceTotal(invoice.lineItems, invoice.discount))}
 	</div>
 	<div class="lg:center viewButton hidden text-sm lg:text-lg">
-		<a href="/" class="text-pastelPurple hover:text-daisyBush"><View /></a>
+		<a href={`/invoices/${invoice.id}`} class="text-pastelPurple hover:text-daisyBush"><View /></a>
 	</div>
 	<div class="lg:center moreButton relative hidden text-sm lg:text-lg">
 		<button

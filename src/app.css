@@ -44,6 +44,11 @@
 		-moz-appearance: textfield;
 	}
 
+	input[type='number']:disabled {
+		@apply appearance-none;
+		-moz-appearance: textfield;
+	}
+
 	svg {
 		@apply fill-current;
 	}

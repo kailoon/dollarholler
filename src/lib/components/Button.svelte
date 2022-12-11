@@ -10,6 +10,7 @@
 		| 'outline'
 		| 'textonly'
 		| 'textonlydescructive' = 'primary';
+	export let height: 'short' | 'regular' = 'regular';
 	export let iconLeft: (new (...args: any[]) => SvelteComponent) | null = null;
 	export let iconRight: (new (...args: any[]) => SvelteComponent) | null = null;
 </script>
@@ -23,6 +24,7 @@
 	class:outline={style === 'outline'}
 	class:textonly={style === 'textonly'}
 	class:textonlydescructive={style === 'textonlydescructive'}
+	class:short={height === 'short'}
 	on:click|preventDefault={() => onClick()}
 >
 	{#if iconLeft}
@@ -55,5 +57,8 @@
 	}
 	.textonlydescructive {
 		@apply bg-transparent px-0 text-scarlet no-underline hover:underline;
+	}
+	.short {
+		@apply !py-1;
 	}
 </style>

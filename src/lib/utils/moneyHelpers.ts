@@ -11,6 +11,15 @@ export const sumLineItems = (lineItems: LineItem[] | undefined): number => {
 	return lineItems.reduce((preValue, curValue) => preValue + curValue.amount, 0);
 };
 
+/* Converting cents to dollars without commas
+ * @param {number} cents
+ * @returns {string}
+ */
+export const centsToDollarWithoutCommas = (cents: number): string => {
+	const dollars = cents / 100;
+	return twoDecimals(dollars);
+};
+
 /*
  * Takes and returns a dollar amount (USD), formatted with commas and 2 decimals places
  * @param {number} cents
@@ -70,12 +79,14 @@ export const sumInvoices = (invoices: Invoice[] | undefined): number => {
  * @param {number|undefined} discount
  * @returns {number}
  */
-export const invoiceTotal = (lineItem: lineItem[] | undefined, discount: number | undefined): number => {
-	const lineItemsSum = sumLineItems(lineItem)
-	if(discount) {
-		const invoiceDiscount = lineItemsSum * (discount/100)
-		return lineItemsSum - invoiceDiscount
+export const invoiceTotal = (
+	lineItems: LineItem[] | undefined,
+	discount: number | undefined
+): number => {
+	const lineItemsSum = sumLineItems(lineItems);
+	if (discount) {
+		const invoiceDiscount = lineItemsSum * (discount / 100);
+		return lineItemsSum - invoiceDiscount;
 	}
-
-	return lineItemsSum
-}
+	return lineItemsSum;
+};

@@ -24,25 +24,26 @@ interface LineItem {
 
 interface Client {
 	clientStatus?: ClientStatus;
-	city: string;
-	email: string;
+	city?: string;
+	email?: string;
 	id: string;
 	name: string;
 	state?: string;
 	street?: string;
 	zip?: string;
+	invoices?: Invoice[];
 }
 
 interface Settings {
-	city: string;
-	email: string;
 	myName: string;
-	state: string;
+	email: string;
 	street: string;
+	city: string;
+	state: string;
 	zip: string;
 }
 
-type NotificationType = 'success' | 'info' | 'error' | 'warning';
+type NotificationType = 'success' | 'error' | 'info' | 'warning';
 
 interface Snackbar {
 	id: string;

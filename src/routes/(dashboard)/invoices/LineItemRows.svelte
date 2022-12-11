@@ -4,21 +4,34 @@
 	import CircledAmount from '$lib/components/CircledAmount.svelte';
 	import type { LineItem } from 'src/global';
 	import LineItemRow from './LineItemRow.svelte';
-	import { centsToDollars, sumLineItems, twoDecimals } from '$lib/utils/moneyHelpers';
+	import {
+		addThousandsSeparator,
+		centsToDollars,
+		sumLineItems,
+		twoDecimals
+	} from '$lib/utils/moneyHelpers';
 
-	export let lineItems: LineItem[] | undefined = undefined;
 	let subtotal: string = '0.00';
 	export let discount: number = 0;
 	let discountedAmount: string = '0.00';
+	let total: string = '0.00';
+	export let isEditable = true;
 
-	$: subtotal = centsToDollars(sumLineItems(lineItems));
+	export let lineItems: LineItem[] | undefined = undefined;
+	let dispatch = createEventDispatcher();
+
+	$: if (sumLineItems(lineItems) > 0) {
+		subtotal = centsToDollars(sumLineItems(lineItems));
+	}
 
 	$: if (subtotal && discount) {
 		discountedAmount = centsToDollars(sumLineItems(lineItems) * (discount / 100));
 	}
-	$: total = twoDecimals(Number(subtotal) - Number(discountedAmount));
 
-	let dispatch = createEventDispatcher();
+	$: {
+		const plainSubtotal = subtotal.replace(',', '');
+		total = addThousandsSeparator(twoDecimals(Number(plainSubtotal) - Number(discountedAmount)));
+	}
 </script>
 
 <div class="invoice-line-item border-b-2 border-daisyBush pb-2">
@@ -36,20 +49,23 @@
 			canDelete={index > 0}
 			on:updateLineItem
 			isRequired={index === 0}
+			{isEditable}
 		/>
 	{/each}
 {/if}
 
 <div class="invoice-line-item">
 	<div class="col-span-1 sm:col-span-2">
-		<Button
-			label="+ Line Item"
-			style="textonly"
-			onClick={() => {
-				dispatch('addLineItem');
-			}}
-			isAnimated={false}
-		/>
+		{#if isEditable}
+			<Button
+				label="+ Line Item"
+				style="textonly"
+				onClick={() => {
+					dispatch('addLineItem');
+				}}
+				isAnimated={false}
+			/>
+		{/if}
 	</div>
 	<div class="py-5 text-right font-bold text-monsoon">Subtotal</div>
 	<div class="py-5 text-right font-mono">${subtotal}</div>
@@ -63,6 +79,7 @@
 			name="discount"
 			min="0"
 			max="100"
+			disabled={!isEditable}
 			bind:value={discount}
 			on:change={() => {
 				dispatch('updateDiscount', { discount });
