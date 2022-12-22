@@ -38,6 +38,7 @@
 		"@supabase/auth-helpers-sveltekit": "^0.8.2",
 		"@supabase/supabase-js": "^2.0.0",
 		"date-fns": "^2.29.3",
+		"svelte-markdown": "^0.2.3",
 		"uuid": "^9.0.0"
 	}
 }

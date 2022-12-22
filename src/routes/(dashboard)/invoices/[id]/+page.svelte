@@ -1,10 +1,17 @@
 <script lang="ts">
 	import Button from '$lib/components/Button.svelte';
+	import { settings, loadSettings } from '$lib/stores/SettingsStore';
 	import { convertDate } from '$lib/utils/dateHelpers';
 	import type { Invoice } from 'src/global';
+	import { onMount } from 'svelte';
 	import LineItemRows from '../LineItemRows.svelte';
+	import SvelteMarkdown from 'svelte-markdown';
 
 	export let data: { invoice: Invoice };
+
+	onMount(() => {
+		loadSettings();
+	});
 
 	const printInvoice = () => {
 		console.log('print invoice');
@@ -51,8 +58,23 @@
 	</div>
 
 	<div class="col-span-2 col-start-5 pt-4">
-		<div class="label">From</div>
-		<p>Amy Dutton<br /></p>
+		{#if $settings && $settings.myName}
+			<div class="label">From</div>
+			<p>
+				{$settings.myName}<br />
+				{#if $settings.street && $settings.city && $settings.state && $settings.zip}
+					{$settings.street}<br />
+					{$settings.city}, {$settings.state}
+					{$settings.zip}
+				{/if}
+			</p>
+		{:else}
+			<div class="center min-h-[68px] rounded bg-gallery">
+				<a href="#" class="text-stone-600 underline hover:no-underline"
+					>Add your contact information</a
+				>
+			</div>
+		{/if}
 	</div>
 
 	<div class="col-span-3">
@@ -97,7 +119,7 @@
 	{#if data.invoice.notes}
 		<div class="col-span-6">
 			<div class="label">Notes</div>
-			<p>{data.invoice.notes}</p>
+			<SvelteMarkdown source={data.invoice.notes} />
 		</div>
 	{/if}
 
@@ -105,7 +127,7 @@
 		<div class="col-span-6">
 			<div class="label">Terms and Conditions</div>
 			<p>
-				{data.invoice.terms}
+				<SvelteMarkdown source={data.invoice.terms} />
 			</p>
 		</div>
 	{/if}
