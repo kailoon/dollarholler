@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import Button from '$lib/components/Button.svelte';
 	import { settings, loadSettings } from '$lib/stores/SettingsStore';
 	import { convertDate } from '$lib/utils/dateHelpers';
@@ -8,6 +9,7 @@
 	import SvelteMarkdown from 'svelte-markdown';
 
 	export let data: { invoice: Invoice };
+	let copyLinkLabel = 'Copy Link';
 
 	onMount(() => {
 		loadSettings();
@@ -18,7 +20,11 @@
 	};
 
 	const copyLink = () => {
-		console.log('copy link');
+		navigator.clipboard.writeText($page.url.href);
+		copyLinkLabel = 'Copied!';
+		setTimeout(() => {
+			copyLinkLabel = 'Copy Link';
+		}, 2000);
 	};
 
 	const payInvoice = () => {
@@ -40,7 +46,12 @@
 			isAnimated={false}
 			onClick={printInvoice}
 		/>
-		<Button label="Copy Link" height="short" onClick={copyLink} />
+		<Button
+			label={copyLinkLabel}
+			height="short"
+			onClick={copyLink}
+			className="min-w-[168px] justify-center"
+		/>
 		<Button label="Pay Invoice" height="short" onClick={payInvoice} />
 		<Button label="Send Invoice" height="short" onClick={sendInvoice} />
 	</div>

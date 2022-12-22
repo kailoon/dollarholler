@@ -3,6 +3,7 @@
 	export let label: string;
 	export let onClick: () => void;
 	export let isAnimated = true;
+	export let className: string = '';
 	export let style:
 		| 'primary'
 		| 'secondary'
@@ -16,7 +17,7 @@
 </script>
 
 <button
-	class="button"
+	class={`button ${className}`}
 	class:isAnimated
 	class:primary={style === 'primary'}
 	class:secondary={style === 'secondary'}
