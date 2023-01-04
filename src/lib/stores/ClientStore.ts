@@ -1,4 +1,3 @@
-import type { Client } from 'src/global';
 import { writable } from 'svelte/store';
 import data from '../../seed.json';
 

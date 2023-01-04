@@ -1,5 +1,3 @@
-import type { Invoice, LineItem } from 'src/global';
-
 /* Takes all the line items and adds them up
  * @param {Array|undefined} lineItems
  * @returns {number}
@@ -68,7 +66,7 @@ export const sumInvoices = (invoices: Invoice[] | undefined): number => {
 	if (!invoices) return 0;
 
 	return invoices.reduce((preValue, curValue) => {
-		const invoiceSum = sumLineItems(curValue.lineItems);
+		const invoiceSum = invoiceTotal(curValue.lineItems, curValue.discount);
 		return preValue + invoiceSum;
 	}, 0);
 };
