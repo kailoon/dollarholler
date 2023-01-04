@@ -1,5 +1,3 @@
-import type { InvoiceStatus, ClientStatus } from './enums';
-
 interface Invoice {
 	client: Client;
 	createdAt: string;
@@ -25,13 +23,12 @@ interface LineItem {
 interface Client {
 	clientStatus?: ClientStatus;
 	city?: string;
-	email?: string;
+	email: string;
 	id: string;
 	name: string;
 	state?: string;
 	street?: string;
 	zip?: string;
-	invoices?: Invoice[];
 }
 
 interface Settings {
