@@ -8,9 +8,21 @@
 	import Archive from '$lib/components/icon/Archive.svelte';
 	import Trash from '$lib/components/icon/Trash.svelte';
 	import { centsToDollars, sumInvoices } from '$lib/utils/moneyHelpers';
+	import SlidePanel from '$lib/components/SlidePanel.svelte';
+	import ClientForm from './ClientForm.svelte';
 
 	export let client: Client;
 	let isAdditionalMenuShowing = false;
+	let isClientFormShowing = false;
+
+	const closePanel = () => {
+		isClientFormShowing = false;
+	};
+
+	const handleEdit = () => {
+		isClientFormShowing = true;
+		isAdditionalMenuShowing = false;
+	};
 
 	const receivedInvoices = () => {
 		if (client?.invoices) {
@@ -58,7 +70,7 @@
 		{#if isAdditionalMenuShowing}
 			<AdditionalOptions
 				options={[
-					{ label: 'Edit', icon: Edit, onClick: () => console.log('editing'), disabled: false },
+					{ label: 'Edit', icon: Edit, onClick: handleEdit, disabled: false },
 					{
 						label: 'Activate',
 						icon: Activate,
@@ -83,6 +95,12 @@
 		{/if}
 	</div>
 </div>
+
+{#if isClientFormShowing}
+	<SlidePanel on:closePanel={closePanel}>
+		<ClientForm {closePanel} formStatus="edit" {client} />
+	</SlidePanel>
+{/if}
 
 <style lang="postcss">
 	.client-row {

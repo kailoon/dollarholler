@@ -11,3 +11,10 @@ export const addClient = (clientToAdd: Client) => {
 	clients.update((prev: Client[]) => [...prev, clientToAdd]);
 	return clientToAdd;
 };
+
+export const updateClient = (clientToUpdate: Client) => {
+	clients.update((prev: Client[]) =>
+		prev.map((cur: Client) => (cur.id === clientToUpdate.id ? clientToUpdate : cur))
+	);
+	return clientToUpdate;
+};

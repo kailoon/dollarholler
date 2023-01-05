@@ -2,20 +2,27 @@
 	import Button from '$lib/components/Button.svelte';
 	import Check from '$lib/components/icon/Check.svelte';
 	import Trash from '$lib/components/icon/Trash.svelte';
-	import { addClient } from '$lib/stores/ClientStore';
+	import { addClient, updateClient } from '$lib/stores/ClientStore';
 	import { states } from '$lib/utils/states';
 
 	export let client: Client = {} as Client;
+	export let formStatus: 'create' | 'edit' = 'create';
 
 	export let closePanel: () => void = () => {};
 
 	const handleSubmit = () => {
-		addClient(client);
+		if (formStatus === 'create') {
+			addClient(client);
+		} else {
+			updateClient(client);
+		}
 		closePanel();
 	};
 </script>
 
-<h2 class="mb-7 font-sansSerif text-3xl font-bold text-daisyBush">add a Client</h2>
+<h2 class="mb-7 font-sansSerif text-3xl font-bold text-daisyBush">
+	{#if formStatus === 'create'}Add{:else}Edit{/if} a Client
+</h2>
 
 <form class="grid grid-cols-6 gap-x-5" on:submit|preventDefault={handleSubmit}>
 	<div class="field col-span-6">
