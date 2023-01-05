@@ -3,7 +3,6 @@
 	import { slide } from 'svelte/transition';
 	import Button from '$lib/components/Button.svelte';
 	import Trash from '$lib/components/icon/Trash.svelte';
-	import type { Client, Invoice, LineItem } from 'src/global';
 	import LineItemRows from './LineItemRows.svelte';
 	import { v4 as uuidv4 } from 'uuid';
 	import { states } from '$lib/utils/states';
