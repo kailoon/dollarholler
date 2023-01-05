@@ -3,6 +3,7 @@
 	import Check from '$lib/components/icon/Check.svelte';
 	import Trash from '$lib/components/icon/Trash.svelte';
 	import { addClient, updateClient } from '$lib/stores/ClientStore';
+	import { snackbar } from '$lib/stores/SnackbarStore';
 	import { states } from '$lib/utils/states';
 
 	export let client: Client = {} as Client;
@@ -13,8 +14,16 @@
 	const handleSubmit = () => {
 		if (formStatus === 'create') {
 			addClient(client);
+			snackbar.send({
+				message: 'Your client ws successfully created',
+				type: 'success'
+			});
 		} else {
 			updateClient(client);
+			snackbar.send({
+				message: 'Your client ws successfully updated',
+				type: 'success'
+			});
 		}
 		closePanel();
 	};
