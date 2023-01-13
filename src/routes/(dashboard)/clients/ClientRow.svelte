@@ -58,7 +58,7 @@
 		${centsToDollars(balanceInvoices())}
 	</div>
 	<div class="view relative hidden items-center justify-center lg:flex">
-		<a href="#" class="text-pastelPurple hover:text-daisyBush"><View /></a>
+		<a href={`/clients/${client.id}`} class="text-pastelPurple hover:text-daisyBush"><View /></a>
 	</div>
 	<div class="three-dots relative hidden items-center justify-center lg:flex">
 		<button

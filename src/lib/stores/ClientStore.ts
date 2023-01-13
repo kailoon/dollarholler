@@ -18,3 +18,8 @@ export const updateClient = (clientToUpdate: Client) => {
 	);
 	return clientToUpdate;
 };
+
+// Allow us to pass in Id to get specific client
+export const getClientById = (id: string) => {
+	return data.clients.find((client) => client.id === id);
+};
