@@ -4,10 +4,8 @@
 	import Edit from '$lib/components/icon/Edit.svelte';
 	import Search from '$lib/components/Search.svelte';
 	import SlidePanel from '$lib/components/SlidePanel.svelte';
-	import { loadInvoices } from '$lib/stores/InvoiceStore';
+	import { isLate } from '$lib/utils/dateHelpers';
 	import { centsToDollars, sumInvoices } from '$lib/utils/moneyHelpers';
-	import supabase from '$lib/utils/supabase';
-	import { onMount } from 'svelte';
 	import BlankState from '../../invoices/BlankState.svelte';
 	import InvoiceRow from '../../invoices/InvoiceRow.svelte';
 	import InvoiceRowHeader from '../../invoices/InvoiceRowHeader.svelte';
@@ -16,11 +14,7 @@
 	let isClientFormShowing = false;
 	let isEditingCurrentCLient = false;
 
-	onMount(async () => {
-		loadInvoices();
-
-		const { data, error } = await supabase.from('Client').select('*');
-	});
+	export let data: { client: Client };
 
 	const editClient = () => {
 		isEditingCurrentCLient = true;
@@ -31,11 +25,43 @@
 		isClientFormShowing = false;
 	};
 
-	export let data: Client;
+	const getDraft = (): string => {
+		if (!data.client.invoices || data.client.invoices.length < 1) return '0.00';
+
+		const draftInvoices = data.client.invoices.filter(
+			(invoice) => invoice.invoiceStatus === 'draft'
+		);
+		return centsToDollars(sumInvoices(draftInvoices));
+	};
+
+	const getPaid = (): string => {
+		if (!data.client.invoices || data.client.invoices.length < 1) return '0.00';
+
+		const paidInvoices = data.client.invoices.filter((invoice) => invoice.invoiceStatus === 'paid');
+		return centsToDollars(sumInvoices(paidInvoices));
+	};
+
+	const getTotalOvderdue = (): string => {
+		if (!data.client.invoices || data.client.invoices.length < 1) return '0.00';
+
+		const paidInvoices = data.client.invoices.filter(
+			(invoice) => invoice.invoiceStatus === 'sent' && isLate(invoice.dueDate)
+		);
+		return centsToDollars(sumInvoices(paidInvoices));
+	};
+
+	const getTotalOutstanding = (): string => {
+		if (!data.client.invoices || data.client.invoices.length < 1) return '0.00';
+
+		const paidInvoices = data.client.invoices.filter(
+			(invoice) => invoice.invoiceStatus === 'sent' && !isLate(invoice.dueDate)
+		);
+		return centsToDollars(sumInvoices(paidInvoices));
+	};
 </script>
 
 <svelte:head>
-	<title>Client | The Dollar Holler</title>
+	<title>{data.client.name} | The Dollar Holler</title>
 </svelte:head>
 
 <div
@@ -58,7 +84,7 @@
 </div>
 
 <div class="mb-7 flex w-full items-center justify-between">
-	<h1 class="font-sansSerif text-3xl font-bold text-daisyBush">Compressed.fm</h1>
+	<h1 class="font-sansSerif text-3xl font-bold text-daisyBush">{data.client.name}</h1>
 	<Button isAnimated={false} style="textonly" iconLeft={Edit} onClick={editClient} label="Edit" />
 </div>
 
@@ -66,19 +92,19 @@
 <div class="mb-10 grid gap-4 rounded-lg bg-gallery py-7 px-10 lg:grid-cols-4">
 	<div class="summary-block">
 		<div class="label">Total Overdue</div>
-		<div class="number"><sup>$</sup>300.00</div>
+		<div class="number"><sup>$</sup>{getTotalOvderdue()}</div>
 	</div>
 	<div class="summary-block">
 		<div class="label">Total Outstanding</div>
-		<div class="number"><sup>$</sup>300.00</div>
+		<div class="number"><sup>$</sup>{getTotalOutstanding()}</div>
 	</div>
 	<div class="summary-block">
 		<div class="label">Total Draft</div>
-		<div class="number"><sup>$</sup>300.00</div>
+		<div class="number"><sup>$</sup>{getDraft()}</div>
 	</div>
 	<div class="summary-block">
 		<div class="label">Total Paid</div>
-		<div class="number"><sup>$</sup>300.00</div>
+		<div class="number"><sup>$</sup>{getPaid()}</div>
 	</div>
 </div>
 
